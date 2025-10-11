@@ -1,9 +1,11 @@
 package com.address.service.impl;
 
+import com.address.client.EmployeeClient;
 import com.address.exception.ResourceNotFoundException;
 import com.address.model.dto.AddressDto;
 import com.address.model.dto.AddressRequest;
 import com.address.model.dto.AddressRequestDto;
+import com.address.model.dto.EmployeeDto;
 import com.address.model.entity.Address;
 import com.address.repository.AddressRepository;
 import com.address.service.AddressService;
@@ -23,18 +25,20 @@ public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
     private final ModelMapper modelMapper;
+    private final EmployeeClient employeeClient;
 
     public AddressServiceImpl(AddressRepository addressRepository,
-                              ModelMapper modelMapper) {
+                              ModelMapper modelMapper,
+                              EmployeeClient employeeClient) {
         this.addressRepository = addressRepository;
         this.modelMapper = modelMapper;
+        this.employeeClient = employeeClient;
     }
 
 
     @Override
     public List<AddressDto> saveAddress(AddressRequest addressRequest) {
-        // TODO: check if employee exists
-
+        employeeClient.getSingleEmployee(addressRequest.getEmpId());
         List<Address> listToSave = this.saveOrUpdateAddressRequest(addressRequest);
         List<Address> savedAddress = addressRepository.saveAll(listToSave);
         return savedAddress.stream().map(address -> modelMapper.map(address, AddressDto.class)).toList();
@@ -42,8 +46,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<AddressDto> updateAddress(AddressRequest addressRequest) {
-        // TODO: check if employee exists
-
+        employeeClient.getSingleEmployee(addressRequest.getEmpId());
         List<Address> addressByEmpId = addressRepository.findAllByEmpId(addressRequest.getEmpId());
         if(addressByEmpId.isEmpty()){
             log.info("No address found for employee id {}", addressRequest.getEmpId());
@@ -83,6 +86,15 @@ public class AddressServiceImpl implements AddressService {
     public void deleteAddress(Long id) {
         Address address = addressRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
         addressRepository.delete(address);
+    }
+
+    @Override
+    public List<AddressDto> getAddressByEmpId(Long empId) {
+        List<Address> addressByEmpId = addressRepository.findAllByEmpId(empId);
+        if(addressByEmpId.isEmpty()){
+            throw new ResourceNotFoundException("No address found for employee id: " + empId);
+        }
+        return addressByEmpId.stream().map(address -> modelMapper.map(address, AddressDto.class)).toList();
     }
 
     private List<Address> saveOrUpdateAddressRequest(AddressRequest addressRequest){
