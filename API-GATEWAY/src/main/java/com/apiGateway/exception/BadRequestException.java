@@ -1,4 +1,4 @@
-package com.address.exception;
+package com.apiGateway.exception;
 
 import org.springframework.http.HttpStatus;
 
