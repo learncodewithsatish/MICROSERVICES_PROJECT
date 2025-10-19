@@ -18,7 +18,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
 
         int status = response.status();
         if(status == 503){
-            throw new BadRequestException("Employee Service is currently down. Please try again later.", HttpStatus.SERVICE_UNAVAILABLE);
+            return new BadRequestException("Employee service is down. Please try again later.", HttpStatus.SERVICE_UNAVAILABLE);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();

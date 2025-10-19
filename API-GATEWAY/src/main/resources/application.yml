@@ -19,6 +19,10 @@ spring:
             - Path=/employees/**
           filters:
             - AuthFilter
+            - name: CircuitBreaker
+              args:
+                name: EMPLOYEE-SERVICE
+                fallbackUri: forward:/employeeServiceFallback
 
         - id: ADDRESS
           uri: lb://ADDRESS
@@ -26,11 +30,58 @@ spring:
             - Path=/addresses/**
           filters:
             - AuthFilter
+            - name: CircuitBreaker
+              args:
+                name: ADDRESS-SERVICE
+                fallbackUri: forward:/addressServiceFallback
 
         - id: AUTH
           uri: lb://AUTH
           predicates:
             - Path=/auth/**
+
+resilience4j:
+  timelimiter:
+    instances:
+      EMPLOYEE-SERVICE:
+        timeoutDuration: 5s
+      ADDRESS-SERVICE:
+        timeoutDuration: 5s
+  circuitbreaker:
+    instances:
+      EMPLOYEE-SERVICE:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 6s
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+
+      ADDRESS-SERVICE:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 6s
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
 
 
 

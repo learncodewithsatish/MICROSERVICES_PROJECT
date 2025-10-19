@@ -66,6 +66,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto getSingleEmployee(Long id) {
+//        try {
+//            Thread.sleep(6000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
         Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
         List<AddressDto> addresses = new ArrayList<>();
         EmployeeDto dto = modelMapper.map(employee, EmployeeDto.class);
