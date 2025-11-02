@@ -8,6 +8,8 @@ import com.auth.util.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UserService {
 
@@ -25,6 +27,7 @@ public class UserService {
 
     public UserDto saveUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setCreatedAt(LocalDateTime.now());
         User savedUser = userRepository.save(user);
         return new UserDto(savedUser.getId(),
                 savedUser.getUsername(),

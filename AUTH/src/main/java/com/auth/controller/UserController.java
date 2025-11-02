@@ -1,11 +1,11 @@
 package com.auth.controller;
 
-import com.auth.exception.BadRequestException;
 import com.auth.model.JwtTokenResponse;
 import com.auth.model.LoginRequest;
 import com.auth.model.User;
 import com.auth.model.UserDto;
 import com.auth.service.UserService;
+import com.commomlib.exception.BadRequestException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

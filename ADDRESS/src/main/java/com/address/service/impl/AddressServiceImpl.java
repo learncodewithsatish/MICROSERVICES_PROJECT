@@ -1,19 +1,19 @@
 package com.address.service.impl;
 
 import com.address.client.EmployeeClient;
-import com.address.exception.ResourceNotFoundException;
 import com.address.model.dto.AddressDto;
 import com.address.model.dto.AddressRequest;
 import com.address.model.dto.AddressRequestDto;
-import com.address.model.dto.EmployeeDto;
 import com.address.model.entity.Address;
 import com.address.repository.AddressRepository;
 import com.address.service.AddressService;
+import com.commomlib.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +40,7 @@ public class AddressServiceImpl implements AddressService {
     public List<AddressDto> saveAddress(AddressRequest addressRequest) {
         employeeClient.getSingleEmployee(addressRequest.getEmpId());
         List<Address> listToSave = this.saveOrUpdateAddressRequest(addressRequest);
+        listToSave.forEach(address -> address.setCreatedAt(LocalDateTime.now()));
         List<Address> savedAddress = addressRepository.saveAll(listToSave);
         return savedAddress.stream().map(address -> modelMapper.map(address, AddressDto.class)).toList();
     }
@@ -62,6 +63,7 @@ public class AddressServiceImpl implements AddressService {
         if(!idsToDelete.isEmpty()){
             addressRepository.deleteAllById(idsToDelete);
         }
+        listToUpdate.forEach(address -> address.setUpdatedAt(LocalDateTime.now()));
 
         List<Address> updatedAddress = addressRepository.saveAll(listToUpdate);
         return updatedAddress.stream().map(address -> modelMapper.map(address, AddressDto.class)).toList();

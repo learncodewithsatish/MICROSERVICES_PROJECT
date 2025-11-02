@@ -1,7 +1,7 @@
 package com.employee.config;
 
-import com.employee.exception.CustomException;
-import com.employee.exception.ErrorResponse;
+import com.commomlib.exception.CustomException;
+import com.commomlib.exception.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;

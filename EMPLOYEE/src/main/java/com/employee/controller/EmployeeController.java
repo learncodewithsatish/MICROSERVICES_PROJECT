@@ -1,6 +1,6 @@
 package com.employee.controller;
 
-import com.employee.exception.MissingParameterException;
+import com.commomlib.exception.MissingParameterException;
 import com.employee.model.dto.EmployeeDto;
 import com.employee.service.EmployeeService;
 import org.springframework.http.HttpStatus;
