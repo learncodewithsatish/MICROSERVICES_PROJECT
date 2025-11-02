@@ -1,10 +1,11 @@
 package com.employee.model.entity;
 
+import com.commomlib.entity.AuditableEntity;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "employees")
-public class Employee {
+public class Employee extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

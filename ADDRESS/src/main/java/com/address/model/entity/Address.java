@@ -1,10 +1,11 @@
 package com.address.model.entity;
 
 import com.address.model.enums.AddressType;
+import com.commomlib.entity.AuditableEntity;
 import jakarta.persistence.*;
 
 @Entity
-public class Address {
+public class Address extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

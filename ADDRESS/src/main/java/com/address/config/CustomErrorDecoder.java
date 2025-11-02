@@ -1,8 +1,8 @@
 package com.address.config;
 
-import com.address.exception.BadRequestException;
-import com.address.exception.CustomException;
-import com.address.exception.ErrorResponse;
+import com.commomlib.exception.BadRequestException;
+import com.commomlib.exception.CustomException;
+import com.commomlib.exception.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
