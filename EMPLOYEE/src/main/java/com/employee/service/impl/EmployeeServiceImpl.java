@@ -11,6 +11,7 @@ import com.employee.service.EmployeeService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
     private final AddressClient addressClient;
+
+    @Value("${greeting}")
+    private String greeting;
+
+    @Value("${common.greeting}")
+    private String commonGreeting;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepository,
                                ModelMapper modelMapper,
@@ -69,6 +76,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto getSingleEmployee(Long id) {
+        System.out.println("Greeting: " + greeting);
+        System.out.println("Common Greeting: " + commonGreeting);
 //        try {
 //            Thread.sleep(6000);
 //        } catch (InterruptedException e) {

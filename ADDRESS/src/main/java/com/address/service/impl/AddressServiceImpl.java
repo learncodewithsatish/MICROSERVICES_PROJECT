@@ -11,6 +11,7 @@ import com.commomlib.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,12 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
     private final ModelMapper modelMapper;
     private final EmployeeClient employeeClient;
+
+    @Value("${greeting}")
+    private String greeting;
+
+    @Value("${common.greeting}")
+    private String commonGreeting;
 
     public AddressServiceImpl(AddressRepository addressRepository,
                               ModelMapper modelMapper,
@@ -97,6 +104,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<AddressDto> getAddressByEmpId(Long empId) {
+        System.out.println("Greeting: " + greeting);
+        System.out.println("Common Greeting: " + commonGreeting);
         List<Address> addressByEmpId = addressRepository.findAllByEmpId(empId);
         if(addressByEmpId.isEmpty()){
             throw new ResourceNotFoundException("No address found for employee id: " + empId);
